@@ -1,2 +1,137 @@
 # Aplicacao Mini Insta
- Aplicação backend baseado no instagram simplificado
+
+Aplicação backend baseado no instagram simplificado
+
+#ESCOPO API:
+
+- POST Login
+  - Dados enviados pelo Front
+    - username
+    - senha
+  - Dados retornados pelo Back
+    - Sucesso / Erro
+    - Token de autenticação (Header)
+  - Objetivos Gerais
+    - Validar usuario e senha:
+      - Buscar user no DB
+      - Verificar se senha está correta
+    - Gerar token de autenticação
+    - Criar o req.usuario com o id e username do usuario
+    - Retornar os dados do usuário e token, ou erro
+- POST Cadastro
+  - Dados enviados
+    - username
+    - senha
+  - Dados retornados
+    - Sucesso / Erro (username já existe)
+  - Objetivos Gerais
+    - Validar username e senha
+      - Verificar se já existe username no DB
+      - Criptografar a senha
+    - Insert usuario e hash senha no DB
+    - Retornar sucesso ou erro
+- GET Profile
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+  - Dados retornados
+    - Foto
+    - username
+    - site
+    - Bio
+    - Email
+    - Tel
+    - Genero
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Retornar todas as informações do usuário, com exceção da senha
+- PUT Profile
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+    - URL foto
+    - Nome
+    - Username\*
+    - Site
+    - Bio
+    - Email
+    - Tel
+    - Genero
+    - Senha
+  - Dados retornados
+    - Sucesso/Erro (username já existe ou em branco)
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Validar se username está preenchido e já existe no DB
+    - Verificar se email já existe no DB, se passado
+    - Criptografar senha, se for passada
+    - Update informações preenchidas no DB
+    - Retornar com sucesso ou erro
+- GET Postagem
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+    - Offset
+  - Dados retornados
+    - Listagem [ ] com 10 postagens:
+      - Usuario postagem:
+        - username
+        - url foto
+        - Perfil oficial (s/n)
+      - Id postagem
+      - Curtida da postagem pelo user
+      - Url das postagens [ ]
+      - Numero de curtidas do post
+      - Descrição do post
+      - Data da postagem
+      - Comentários [ ] :
+        - Comentários do post
+        - Username do comentário
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Retornar o DB de Postagens, onde usuario não seja o logado. Fazer join com tabelas de curtidas, comentários e fotos postagens
+- POST Postagem
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+    - Url das fotos [ ]
+    - Descrição do post
+    - Data da postagem
+  - Dados retornados
+    - Sucesso/Erro
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Exigir que seja informado pelo menos uma url de foto
+    - Insert no DB de Postagens para o usuario logado
+    - Cadastrar no DB de Fotos com o id_postagem
+    - Retornar sucesso ou erro
+- POST Comentário
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+    - Texto com o comentário
+    - Id postagem
+  - Dados retornados
+    - Sucesso/Erro
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Buscar a postagem pelo id
+    - Verificar se campo descrição está preenchido
+    - Insert into DB comentarios
+    - Retornar sucesso/erro
+- POST Curtir
+  - Dados enviados
+    - Token de autenticação (Que terá ID e username)
+    - Post ID
+    - Booleano curtir (true/false)
+    - ID username que clicou (vem to token)
+    - Data clique
+  - Dados retornados
+    - Quantidade de curtidas
+  - Objetivos Gerais
+    - Verificar se token foi enviado e está válido
+    - Buscar no DB o cadastro do usuário com a informação vinda do token
+    - Buscar a postagem pelo id
+    - Verificar se usuário já curtiu a postagem
+    - Insert curtida no DB Curtir
+    - Retornar sucesso/erro
